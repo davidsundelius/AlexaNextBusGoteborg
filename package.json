@@ -1,0 +1,9 @@
+{
+  "name": "alexa-howto",
+  "description": "Example Amazon Alexa Skill built with the Amazon Alexa Skills SDK",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "alexa-sdk": "^1.0.6"
+  }
+}
