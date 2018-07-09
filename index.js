@@ -21,9 +21,9 @@ const handlers = {
     this.emit('SessionEndedRequest');
   },
   'SessionEndedRequest': function () {
-    service.getNextCommute('57.697045', '11.979382999999984').then(function(result)) {
+    service.getNextCommute('57.697045', '11.979382999999984').then(function(result) {
       this.emit(':tell', this.t('MESSAGE', result.number, result.goal, result.time, result.stopName));
-    }
+    });
   },
 };
 
