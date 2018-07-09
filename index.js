@@ -23,6 +23,8 @@ const handlers = {
   'SessionEndedRequest': function () {
     service.getNextCommute('57.697045', '11.979382999999984').then(function(result) {
       this.emit(':tell', this.t('MESSAGE', result.number, result.goal, result.time, result.stopName));
+    }).catch(function(error) {
+      this.emit(':tell', this.t('ERROR'));
     });
   },
 };
@@ -30,7 +32,8 @@ const handlers = {
 const languageStrings = {
   'en-US': {
     translation: {
-      MESSAGE: "Your next commute with number %s headed for %s will leave at %s from %s"
+      MESSAGE: "Your next commute with number %s headed for %s will leave at %s from %s",
+      ERROR: "Can't get information from Västtrafik on the departures right now, try again later"
     }
   }
 };

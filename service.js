@@ -3,7 +3,7 @@
 const xml2js = require('xml2js').parseString;
 const https = require('https');
 
-const authToken = 'a34d7022-fc89-3c74-918c-c6cf6daedc05';
+const authToken = '9045b797-7cdf-3f2f-84e5-414c584c0a8c';
 
 var getClosestStop = function(longitude, latitude) {
   return new Promise(function(resolve, reject) {
@@ -22,7 +22,11 @@ var getClosestStop = function(longitude, latitude) {
       });
       resp.on('end', () => {
         xml2js(data, function (err, result) {
-          resolve(result.LocationList.StopLocation[0].$);
+          if(!result.hasOwnProperty('ams:fault')) {
+            resolve(result.LocationList.StopLocation[0].$);
+          } else {
+            reject(result['ams:fault']['ams:description']);
+          }
         });
       });
     }).on("error", (err) => {
@@ -48,7 +52,11 @@ var getClosestDeparture = function(stopId, date, time) {
       });
       resp.on('end', () => {
         xml2js(data, function (err, result) {
-          resolve(result.DepartureBoard.Departure[0].$);
+          if(!result.hasOwnProperty('ams:fault')) {
+            resolve(result.DepartureBoard.Departure[0].$);
+          } else {
+            reject(result['ams:fault']['ams:description']);
+          }
         });
       });
     }).on("error", (err) => {
@@ -76,7 +84,11 @@ module.exports = {
           result.goal = departure.direction;
           result.time = departure.time;
           resolve(result);
+        }).catch(function(error) {
+          reject('Failed to fetch the closest departure: ' + error);
         });
+      }).catch(function(error) {
+        reject('Failed to fetch the closest stop: ' + error);
       });
     })
   }
